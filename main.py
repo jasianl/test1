@@ -36,7 +36,7 @@ for line in open("emails.txt", "r"):
     if line not in open("used_emails.txt", "r"):
         emails.append(line)
 
-password = "whatsthepass44"
+password = os.env.get('password')
 
 first = open("first_names.txt", "r").readlines()
 last = open("last_names.txt", "r").readlines()
