@@ -13,22 +13,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 
-
-
 from discord import Webhook, RequestsWebhookAdapter
-webhook = Webhook.from_url("https://discord.com/api/webhooks/895131312120295454/Jnf8vKrN6_bswb-PoJFAbqOc7J0KUVqESsyB_oysDMJByrzTKgXzM3eVinb-E35u9RQo", adapter=RequestsWebhookAdapter())
+
+webhook = Webhook.from_url(
+    "https://discord.com/api/webhooks/895131312120295454/Jnf8vKrN6_bswb-PoJFAbqOc7J0KUVqESsyB_oysDMJByrzTKgXzM3eVinb-E35u9RQo",
+    adapter=RequestsWebhookAdapter())
 
 from selenium.webdriver import DesiredCapabilities
+
 capabilities = DesiredCapabilities.CHROME
 capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
-desired_capabilities=capabilities
+desired_capabilities = capabilities
 
 import concurrent.futures
 import threading
 
 import gc
 
-invite = 'https://discord.gg/XDjNdNdG' #
+invite = 'https://discord.gg/XDjNdNdG'  #
 invite = 'https://discord.gg/334xGGKa'
 
 emails = []
@@ -36,7 +38,7 @@ for line in open("emails.txt", "r"):
     if line not in open("used_emails.txt", "r"):
         emails.append(line)
 
-password = os.env.get('password')
+password = os.environ.get('password')
 
 first = open("first_names.txt", "r").readlines()
 last = open("last_names.txt", "r").readlines()
@@ -80,10 +82,8 @@ class Browser():
             return
         pass
 
-
         captcha_not_complete = True
         refresh = 3
-
 
         while refresh > 0 and captcha_not_complete:
             refresh -= 1
@@ -91,7 +91,8 @@ class Browser():
 
             try:
                 failed = WebDriverWait(self.driver, 5).until(
-                    EC.presence_of_element_located((By.XPATH,'//*[@id="app-mount"]/div[2]/div/div/div/section/div/button[1]/div'))
+                    EC.presence_of_element_located(
+                        (By.XPATH, '//*[@id="app-mount"]/div[2]/div/div/div/section/div/button[1]/div'))
                 )
                 self._quit()
                 print("Invite not found")
@@ -101,7 +102,8 @@ class Browser():
 
             try:
                 username = WebDriverWait(self.driver, 30).until(
-                    EC.presence_of_element_located((By.XPATH,'//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[1]/div/input'))
+                    EC.presence_of_element_located(
+                        (By.XPATH, '//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[1]/div/input'))
                 )
                 user = str(random.choice(first).strip("\n") + " " + random.choice(last).strip("\n"))
                 username.send_keys(user)
@@ -111,7 +113,8 @@ class Browser():
                 return
 
             try:
-                checkbox = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[2]/label/input')
+                checkbox = self.driver.find_element_by_xpath(
+                    '//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[2]/label/input')
                 checkbox.click()
             except:
                 print("no checkbox")
@@ -120,13 +123,15 @@ class Browser():
             time.sleep(random.uniform(1.4, 3.7))
 
             try:
-                submit = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[2]/button')
+                submit = self.driver.find_element_by_xpath(
+                    '//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[2]/button')
                 submit.submit()
             except:
                 pass
 
             try:
-                submit = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[3]/button')
+                submit = self.driver.find_element_by_xpath(
+                    '//*[@id="app-mount"]/div[2]/div/div/div/div/form/div/div[2]/div[3]/button')
                 submit.submit()
             except:
                 pass
@@ -143,14 +148,11 @@ class Browser():
                 except:
                     pass
 
-
             # Some magic shit hcaptcha solver thing
             captcha_checkbox = '#checkbox'
             captcha_iframe = '[data-hcaptcha-response]'
 
-
             # REFRESH THE PAGE IF NOT LOADED IN 3 TRIES THEN GIVE IT 3 MORE TRIES
-
 
             tries = 4
             nocaptcha = True
@@ -191,7 +193,7 @@ class Browser():
                     # IF CAPTCHA IS NOT SOLVABLE, QUIT
                     print("checking solvability")
                     time.sleep(random.uniform(0.6, 1.2))
-                    notdoable = self.driver.find_element_by_xpath('/html/body/div[5]/div[1]') #/html/body/div[5]
+                    notdoable = self.driver.find_element_by_xpath('/html/body/div[5]/div[1]')  # /html/body/div[5]
                 except:
                     print("solvable")
                     pass
@@ -199,13 +201,6 @@ class Browser():
             if captcha_not_complete:
                 self.driver.refresh()
                 print("Refreshing captcha...")
-
-
-
-
-
-
-
 
         if tries == 0:
             self._quit()
@@ -225,7 +220,7 @@ class Browser():
                         print(entry['message'])
                         token = json.loads(entry['message'])['message']['params']['response']['payloadData']
                         token = json.loads(token)['d']['token']
-#                         webhook.send(f"{token}")
+                        #                         webhook.send(f"{token}")
                         print(token, type(token))
                         notoken = False
                         # self.driver.quit()
@@ -240,7 +235,7 @@ class Browser():
 
             try:
                 phone = WebDriverWait(self.driver, 5).until(
-                    EC.presence_of_element_located((By.XPATH,'//*[@id="app-mount"]/div[6]/div/div/div[1]/div[4]/div'))
+                    EC.presence_of_element_located((By.XPATH, '//*[@id="app-mount"]/div[6]/div/div/div[1]/div[4]/div'))
                 )
                 print("Phone blocked")
                 self._quit()
@@ -249,20 +244,23 @@ class Browser():
                 pass
 
             day = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.XPATH,'//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[2]/div/div/div/div/div[1]/div[1]'))
+                EC.presence_of_element_located((By.XPATH,
+                                                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[2]/div/div/div/div/div[1]/div[1]'))
             )
             day.click()
             actions = ActionChains(self.driver)
             actions.send_keys('23')
             actions.perform()
 
-            year = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[3]/div/div/div/div/div[1]/div[1]')
+            year = self.driver.find_element_by_xpath(
+                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[3]/div/div/div/div/div[1]/div[1]')
             year.click()
             actions = ActionChains(self.driver)
             actions.send_keys('1989')
             actions.perform()
 
-            month = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[1]/div/div/div/div/div[1]/div[1]')
+            month = self.driver.find_element_by_xpath(
+                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/form/div[2]/div[1]/div[1]/div/div/div/div/div[1]/div[1]')
             month.click()
             actions = ActionChains(self.driver)
             actions.send_keys('9')
@@ -277,20 +275,23 @@ class Browser():
             time.sleep(1)
 
             # Email
-            email_entry = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/div[1]/div/input')
+            email_entry = self.driver.find_element_by_xpath(
+                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/div[1]/div/input')
             email = emails.pop(0)
             email_entry.send_keys(email)
             f = open("used_emails.txt", "a")
-            f.write(email+"\n")
+            f.write(email + "\n")
             f.close()
 
             # Password
-            password_entry = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/div[2]/div/input')
+            password_entry = self.driver.find_element_by_xpath(
+                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/div[2]/div/input')
             password_entry.send_keys(password)
 
             time.sleep(1)
 
-            submit2 = self.driver.find_element_by_xpath('//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/button')
+            submit2 = self.driver.find_element_by_xpath(
+                '//*[@id="app-mount"]/div[5]/div[2]/div/div/div/div[2]/form/button')
             submit2.click()
 
             time.sleep(1)
@@ -302,16 +303,19 @@ class Browser():
         except Exception as e:
             print(e)
 
+
 def get_proxies():
     r = requests.get(
         "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=3000&country=US&ssl=all&anonymity=all")
     proxies = r.content.decode().split("\r\n")
     return proxies
 
+
 def checkProxy(proxy):
     try:
         print(proxy)
-        r = requests.get('https://discord.gg/eS4qmCVM', proxies={'http': f'http://{proxy}', 'https': f'http://{proxy}'}, timeout=2)
+        r = requests.get('https://discord.gg/eS4qmCVM', proxies={'http': f'http://{proxy}', 'https': f'http://{proxy}'},
+                         timeout=2)
         if r.status_code == 200:
             print(r.text)
             return proxy
@@ -320,6 +324,7 @@ def checkProxy(proxy):
         pass
 
     return None
+
 
 # if __name__ == "__main__":
 #     # accounts = get_accounts()
@@ -344,7 +349,7 @@ def checkProxy(proxy):
 def run(proxy):
     # print("100")
     try:
-       if checkProxy(proxy) != None:
+        if checkProxy(proxy) != None:
             browser = Browser(proxy)
             browser.invite(invite)
             time.sleep(1)
@@ -355,6 +360,8 @@ def run(proxy):
         print(e)
         print(traceback.format_exc())
         pass
+
+
 proxies = get_proxies()
 proxies = []
 # for p in open("proxies.txt", "r"):
@@ -372,6 +379,3 @@ while True:
         print(proxy)
         thread = threading.Thread(target=run, args=(proxy,))
         thread.start()
-
-# with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-#     executor.map(run, proxies)
