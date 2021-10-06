@@ -48,7 +48,7 @@ class Browser():
 
     def __init__(self, PROXY):
         print(PROXY)
-        self.ua = UserAgent()
+        self.ua = UserAgent(use_cache_server=False)
 
         options = webdriver.ChromeOptions()
         options.headless = True
