@@ -370,7 +370,7 @@ while True:
     if len(proxies) == 0:
         proxies = get_proxies()
         print("Refreshing proxies")
-    if threading.activeCount() <= 10:
+    if threading.activeCount() <= 1:
         print(len(gc.get_objects()))
 
         print(threading.activeCount())
